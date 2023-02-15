@@ -10,7 +10,7 @@ function Cart(props) {
     const cartItems = Dummy_cart.map((cart) => <li key={cart.id}>{cart.name}</li>)
 
 
-    return <Modal>
+    return <Modal onHideCart={props.onHideCart}>
         <ul className={classes['cart-items']}>
             {cartItems}
         </ul>
@@ -19,7 +19,7 @@ function Cart(props) {
             <span>598</span>
         </div>
         <div className={classes.actions}>
-            <button className={classes['button--alt']}>Close</button>
+            <button className={classes['button--alt']} onClick={props.onHideCart}>Close</button>
             <button className={classes.button}>Order</button>
         </div>
     </Modal>
