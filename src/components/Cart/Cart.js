@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
+import CartContext from "../../store/cart-context";
 import Modal from "../UI/Modal";
-import classes from './Cart.module.css';
+import classes from "./Cart.module.css";
+import CartItem from "./CartItem";
 
 function Cart(props) {
-    const Dummy_cart = [
-        {id : 'm1', name : 'Sushi', qty : 2, price : 598.00}
-    ];
+  const cartCtx = useContext(CartContext);
 
-    const cartItems = Dummy_cart.map((cart) => <li key={cart.id}>{cart.name}</li>)
+  const cartItemRemoveHandler = (id) => {};
 
+  const cartItemAddHandler = (item) => {};
 
-    return <Modal onHideCart={props.onHideCart}>
-        <ul className={classes['cart-items']}>
-            {cartItems}
-        </ul>
-        <div className={classes.total}>
-            <span>Total Amount</span>
-            <span>598</span>
-        </div>
-        <div className={classes.actions}>
-            <button className={classes['button--alt']} onClick={props.onHideCart}>Close</button>
-            <button className={classes.button}>Order</button>
-        </div>
+  console.log(cartCtx);
+  const cartItems = cartCtx.items.map((cart) => {
+    // return (<li>{cart.name}</li>)
+    return <CartItem
+      key={cart.id}
+      name={cart.name}
+      qty={cart.qty}
+      price={cart.price}
+    //   preconfig  the func with bind
+      onRemove={cartItemRemoveHandler.bind(null, cart.id)}
+      onAdd={cartItemAddHandler.bind(null, cart)}
+    ></CartItem>;
+  });
+
+  const totalAmt = `₹${cartCtx.totalAmt.toFixed(2)}`;
+  const hasItems = cartCtx.items.length > 0;
+
+  return (
+    <Modal onHideCart={props.onHideCart}>
+      <ul className={classes["cart-items"]}>{cartItems}</ul>
+      <div className={classes.total}>
+        <span>Total Amount</span>
+        <span>{totalAmt}</span>
+      </div>
+      <div className={classes.actions}>
+        <button className={classes["button--alt"]} onClick={props.onHideCart}>
+          Close
+        </button>
+        {hasItems && <button className={classes.button}>Order</button>}
+      </div>
     </Modal>
+  );
 }
 
 export default Cart;
