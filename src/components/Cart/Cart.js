@@ -11,7 +11,7 @@ function Cart(props) {
 
   const cartItemAddHandler = (item) => {};
 
-  console.log(cartCtx);
+//   console.log(cartCtx);
   const cartItems = cartCtx.items.map((cart) => {
     // return (<li>{cart.name}</li>)
     return <CartItem
