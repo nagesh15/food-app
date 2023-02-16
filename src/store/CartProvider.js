@@ -11,7 +11,9 @@ const cartReducer =(state, action) => {
         const updatedTotalAmt = state.totalAmt + action.item.price * action.item.qty; 
 
         //if items already present in the cart
-        const existingCartItemIndex = state.items.findIndex(item => item.id === action.item.id);
+        const existingCartItemIndex = state.items.findIndex(
+            (item) => item.id === action.item.id
+        );
 
         //get the existing cart item
         const existingCartItem = state.items[existingCartItemIndex];
@@ -37,6 +39,39 @@ const cartReducer =(state, action) => {
             totalAmt : updatedTotalAmt
         }
     }
+
+    if(action.type === 'REMOVE_ITEM') {
+        //if items already present in the cart
+        const existingCartItemIndex = state.items.findIndex(
+            (item) => item.id === action.id
+        );
+
+        //get the existing cart item
+        const existingCartItem = state.items[existingCartItemIndex];
+        const updatedTotalAmt = state.totalAmt - existingCartItem.price;
+
+        let updatedCartItems;
+
+        //if cart item quantity is 1 
+        if(existingCartItem.qty === 1) {
+            updatedCartItems = state.items.filter(item => item.id !== action.id);
+        } else {
+            const updatedCartItem = {
+                ...existingCartItem,
+                qty : existingCartItem.qty - 1
+            };
+
+            updatedCartItems = [...state.items];
+            updatedCartItems[existingCartItemIndex] = updatedCartItem;
+        }
+
+        return {
+            items : updatedCartItems,
+            totalAmt : updatedTotalAmt
+        }
+    }
+
+
     return initialCartState;
 }
 
